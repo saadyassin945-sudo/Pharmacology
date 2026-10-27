@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Pharmacology</title>
+    <style>
+        /* ===== BASE ===== */
+        :root {
+            --bg1: #0a0e1a;
+            --bg2: #141e33;
+            --primary: #00d4ff;
+            --primary-dark: #0099cc;
+            --accent: #facc15;
+            --danger: #f87171;
+            --success: #34d399;
+            --card-bg: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text: #e8edf5;
+            --muted: #94a3b8;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            --glow: 0 0 30px rgba(0, 212, 255, 0.06);
+            --radius: 16px;
+            --header-bg: rgba(255, 255, 255, 0.03);
+            --header-border: rgba(255, 255, 255, 0.04);
+            --footer-border: rgba(255, 255, 255, 0.03);
+            --table-header-bg: rgba(0, 212, 255, 0.08);
+            --card-title-bg: rgba(0, 212, 255, 0.06);
+            --highlight-bg: #facc15;
+            --highlight-text: #0f172a;
+        }
+
+        [data-theme="light"] {
+            --bg1: #f0f4f8;
+            --bg2: #e2e8f0;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(0, 0, 0, 0.1);
+            --text: #0f172a;
+            --muted: #475569;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --glow: 0 0 30px rgba(0, 212, 255, 0.02);
+            --header-bg: rgba(255, 255, 255, 0.7);
+            --header-border: rgba(0, 0, 0, 0.04);
+            --footer-border: rgba(0, 0, 0, 0.04);
+            --table-header-bg: rgba(0, 212, 255, 0.12);
+            --card-title-bg: rgba(0, 212, 255, 0.08);
+            --highlight-bg: #facc15;
+            --highlight-text: #0f172a;
+        }
+
+        .highlight-text {
+            background-color: var(--highlight-bg);
+            color: var(--highlight-text);
+            padding: 0 4px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, 'Cairo', sans-serif;
+            background: linear-gradient(135deg, var(--bg1), var(--bg2), #0f1a2b);
+            min-height: 100vh;
+            color: var(--text);
+            padding: 16px 8px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            transition: background 0.4s ease;
+        }
+        .app { max-width: 1100px; width: 100%; }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 16px 16px;
+            background: var(--header-bg);
+            border-radius: 20px;
+            border: 1px solid var(--header-border);
+            backdrop-filter: blur(4px);
+        }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 4px 25px rgba(0, 212, 255, 0.15);
+            transition: color 0.3s ease;
+        }
+        [data-theme="light"] .header h1 { color: #0f172a; text-shadow: none; }
+        .header h1 .highlight {
+            background: linear-gradient(135deg, var(--primary), #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header .sub {
+            color: var(--primary);
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            font-size: 0.8rem;
+            margin-top: 2px;
+        }
+        .header .creator {
+            color: var(--muted);
+            font-size: 0.75rem;
+            margin-top: 4px;
+        }
+        .header .creator .name { color: var(--text); font-weight: 700; }
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+        }
+        .theme-toggle:hover {
+            border-color: var(--primary);
+            background: rgba(0, 212, 255, 0.08);
+            transform: scale(1.05);
+        }
+        [data-theme="light"] .theme-toggle {
+            background: rgba(0, 0, 0, 0.04);
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+
+        /* ===== TABS ===== */
+        .tabs-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 16px;
+            justify-content: center;
+        }
+        .tab-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
+            padding: 8px 14px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            line-height: 1.3;
+        }
+        .tab-btn:hover { border-color: var(--primary); color: var(--text); }
+        .tab-btn.active {
+            border-color: var(--primary);
+            background: rgba(0, 212, 255, 0.08);
+            color: var(--primary);
+        }
+        .tab-btn .en { display: block; font-size: 0.7rem; }
+        .tab-btn .ar { display: block; font-size: 0.55rem; opacity: 0.7; }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow), var(--glow);
+            padding: 18px 14px;
+            margin-bottom: 16px;
+            transition: background 0.3s ease, border 0.3s ease;
+            display: none;
+        }
+        .card.active { display: block; }
+        .card h2 {
+            font-size: 1.3rem;
+            color: var(--text);
+            border-right: 4px solid var(--primary);
+            padding-right: 12px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        /* ===== SLIDES ===== */
+        .slide-container {
+            position: relative;
+            min-height: 300px;
+        }
+        .slide {
+            display: none;
+            animation: fadeSlide 0.3s ease;
+        }
+        .slide.active { display: block; }
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateX(15px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .slide-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+        .slide-progress .bar {
+            flex: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            margin: 0 12px;
+            overflow: hidden;
+        }
+        .slide-progress .bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #818cf8);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        .slide-progress .count {
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .slide-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+        .slide-nav .btn-nav {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 80px;
+            text-align: center;
+        }
+        .slide-nav .btn-nav:hover:not(:disabled) {
+            background: rgba(0, 212, 255, 0.08);
+            border-color: var(--primary);
+        }
+        .slide-nav .btn-nav:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .slide-nav .btn-nav.primary {
+            background: var(--primary);
+            color: #0a0e1a;
+            border-color: var(--primary);
+        }
+        .slide-nav .btn-nav.primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        [data-theme="light"] .slide-nav .btn-nav {
+            background: rgba(0, 0, 0, 0.02);
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+
+        /* ===== CARDS GRID ===== */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 14px;
+            margin-bottom: 8px;
+        }
+
+        .topic-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px 14px 12px;
+            transition: border-color 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .topic-card:hover { border-color: var(--primary); }
+
+        .topic-card .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid var(--card-title-bg);
+        }
+        .topic-card .card-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--primary);
+            line-height: 1.4;
+            flex: 1;
+        }
+        .topic-card .card-title-ar {
+            color: var(--muted);
+            font-weight: 400;
+            display: none;
+        }
+        .topic-card .card-title-ar.show { display: inline; }
+        .topic-card .card-title-en { display: inline; }
+        .topic-card .card-title-en.hidden { display: none; }
+
+        .topic-card .translate-btn {
+            background: rgba(0, 212, 255, 0.08);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 3px 12px;
+            font-size: 0.6rem;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-right: 8px;
+        }
+        .topic-card .translate-btn:hover {
+            background: rgba(0, 212, 255, 0.18);
+            border-color: var(--primary);
+        }
+        .topic-card .translate-btn.active {
+            background: rgba(0, 212, 255, 0.18);
+            border-color: var(--primary);
+        }
+
+        .topic-card .card-items {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex: 1;
+        }
+        .topic-card .card-items li {
+            padding: 4px 0 4px 0;
+            line-height: 1.6;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        [data-theme="light"] .topic-card .card-items li {
+            border-bottom-color: rgba(0, 0, 0, 0.04);
+        }
+        .topic-card .card-items li:last-child { border-bottom: none; }
+
+        .topic-card .item-en {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            display: block;
+            text-align: left;
+            direction: ltr;
+        }
+        .topic-card .item-ar {
+            color: var(--muted);
+            font-size: 0.82rem;
+            line-height: 1.6;
+            text-align: right;
+            direction: rtl;
+            display: none;
+            margin-top: 2px;
+            padding-right: 8px;
+            border-right: 2px solid rgba(0, 212, 255, 0.2);
+        }
+        .topic-card .item-ar.show { display: block; }
+
+        .topic-card .card-items.numbered {
+            counter-reset: item-counter;
+        }
+        .topic-card .card-items.numbered li {
+            padding-right: 28px;
+            position: relative;
+            counter-increment: item-counter;
+        }
+        .topic-card .card-items.numbered li::before {
+            content: counter(item-counter) "-";
+            position: absolute;
+            right: 2px;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        /* ===== TABLES ===== */
+        .info-table-wrap {
+            overflow-x: auto;
+            margin: 12px 0;
+            border-radius: 10px;
+            border: 1px solid var(--card-border);
+            grid-column: 1 / -1;
+        }
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+            min-width: 500px;
+        }
+        .info-table th {
+            background: var(--table-header-bg);
+            color: var(--primary);
+            padding: 8px 6px;
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            font-weight: 700;
+        }
+        .info-table td {
+            padding: 8px 6px;
+            border-bottom: 1px solid var(--card-border);
+            vertical-align: top;
+            line-height: 1.5;
+        }
+        .info-table tr:last-child td { border-bottom: none; }
+        .info-table .ar-text {
+            border-right: none;
+            padding-right: 0;
+            margin-top: 2px;
+            font-size: 0.78rem;
+            display: block;
+            color: var(--muted);
+        }
+        .info-table .en-text { font-size: 0.85rem; }
+
+        @media (max-width: 600px) {
+            .cards-grid { grid-template-columns: 1fr; }
+            .info-table { font-size: 0.72rem; min-width: 350px; }
+            .topic-card .card-title { font-size: 0.85rem; }
+        }
+
+        .footer-credit {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.12);
+            font-size: 0.7rem;
+            margin-top: 24px;
+            padding: 10px 0;
+            border-top: 1px solid var(--footer-border);
+        }
+        [data-theme="light"] .footer-credit { color: rgba(0, 0, 0, 0.2); }
+        .footer-credit .name { color: var(--primary); font-weight: 600; }
+
+        @media (max-width: 768px) {
+            body { padding: 8px 4px; }
+            .header h1 { font-size: 1.4rem; }
+            .tab-btn { padding: 6px 10px; font-size: 0.6rem; }
+            .card { padding: 14px 10px; }
+            .card h2 { font-size: 1.1rem; }
+        }
+
+        .topic-card.full-width { grid-column: 1 / -1; }
+    </style>
+</head>
+<body>
+
+    <div class="app">
+        <div class="header">
+            <div class="header-top">
+                <div>
+                    <h1><span class="highlight">Pharmacology</span></h1>
+                    <div class="sub">
+                    </div>
+                    <div class="creator">Created by <span class="name">MR. YASSIN THARWAT</span></div>
+                </div>
+                <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="تبديل الوضع">☀</button>
+            </div>
+        </div>
+
+        <div class="tabs-wrap" id="tabsContainer"></div>
+        <div id="sectionsContainer"></div>
+        <div class="footer-credit">
+            Created by <span class="name">MR. YASSIN THARWAT</span>
+        </div>
+    </div>
+
+    <script>
+        // ================================================================
+        //  THEME
+        // ================================================================
+        let currentTheme = localStorage.getItem('theme') || 'dark';
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            document.getElementById('themeToggle').textContent = theme === 'light' ? '☾' : '☀';
+            localStorage.setItem('theme', theme);
+            currentTheme = theme;
+        }
+        function toggleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+
+        // ================================================================
+        //  SLIDE SYSTEM
+        // ================================================================
+        let slideState = {};
+
+        function initSlideState(partId, totalSlides) {
+            slideState[partId] = { current: 0, total: totalSlides };
+        }
+
+        function renderSlide(partId, containerId) {
+            const state = slideState[partId];
+            if (!state) return;
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            const slides = container.querySelectorAll('.slide');
+            slides.forEach((s, i) => s.classList.toggle('active', i === state.current));
+            const progressBar = container.querySelector('.slide-progress .fill');
+            const countSpan = container.querySelector('.slide-progress .count');
+            if (progressBar) progressBar.style.width = ((state.current + 1) / state.total * 100) + '%';
+            if (countSpan) countSpan.textContent = `${state.current + 1} / ${state.total}`;
+            const prevBtn = container.querySelector('.btn-nav.prev');
+            const nextBtn = container.querySelector('.btn-nav.next');
+            if (prevBtn) prevBtn.disabled = state.current === 0;
+            if (nextBtn) nextBtn.disabled = state.current === state.total - 1;
+        }
+
+        function goToSlide(partId, containerId, index) {
+            const state = slideState[partId];
+            if (!state) return;
+            if (index < 0) index = 0;
+            if (index >= state.total) index = state.total - 1;
+            state.current = index;
+            renderSlide(partId, containerId);
+        }
+
+        // ================================================================
+        //  HELPERS
+        // ================================================================
+        function createSlideHTML(title, cardsHTML) {
+            return `
+                <div class="slide">
+                    <h3 style="font-size:1.1rem; color:var(--primary); margin-bottom:12px; border-right:3px solid var(--primary); padding-right:10px;">${title}</h3>
+                    <div class="cards-grid">${cardsHTML}</div>
+                </div>
+            `;
+        }
+
+        function card(title, items, arTitle = '') {
+            const cardId = 'c' + Math.random().toString(36).substr(2, 8);
+            const itemsHTML = items.map((item) => {
+                const en = item.en || item;
+                const ar = item.ar || '';
+                return `<li><span class="item-en">${en}</span><span class="item-ar">${ar}</span></li>`;
+            }).join('');
+            const listClass = items.some(i => i.en && i.en.match(/^\d/)) ? 'card-items numbered' : 'card-items simple';
+            return `
+                <div class="topic-card" data-card="${cardId}">
+                    <div class="card-header">
+                        <span class="card-title">
+                            <span class="card-title-en">${title}</span>
+                            <span class="card-title-ar" id="${cardId}-title-ar">${arTitle}</span>
+                        </span>
+                        <button class="translate-btn" data-card="${cardId}" onclick="toggleCardTranslation('${cardId}')">ترجمة</button>
+                    </div>
+                    <ul class="${listClass}">${itemsHTML}</ul>
+                </div>
+            `;
+        }
+
+        function tableCard(title, tableHTML, arTitle = '') {
+            return `
+                <div class="topic-card full-width">
+                    <div class="card-header">
+                        <span class="card-title">
+                            <span class="card-title-en">${title}</span>
+                            <span class="card-title-ar" style="display:block;">${arTitle}</span>
+                        </span>
+                    </div>
+                    <div class="info-table-wrap">${tableHTML}</div>
+                </div>
+            `;
+        }
+
+        function cell(en, ar) {
+            return `<span class="en-text">${en}</span><span class="ar-text">${ar}</span>`;
+        }
+
+        function toggleCardTranslation(cardId) {
+            const card = document.querySelector(`.topic-card[data-card="${cardId}"]`);
+            if (!card) return;
+            const arItems = card.querySelectorAll('.item-ar');
+            const titleAr = document.getElementById(`${cardId}-title-ar`);
+            const titleEn = card.querySelector('.card-title-en');
+            const btn = card.querySelector('.translate-btn');
+            const isVisible = arItems.length > 0 && arItems[0].classList.contains('show');
+            arItems.forEach(el => el.classList.toggle('show'));
+            if (titleAr) {
+                titleAr.classList.toggle('show');
+                if (titleEn) titleEn.classList.toggle('hidden');
+            }
+            if (btn) {
+                btn.textContent = isVisible ? 'ترجمة' : 'إخفاء';
+                btn.classList.toggle('active');
+            }
+        }
+
+        // ================================================================
+        //  DATA: PHARMACOKINETICS LECTURE
+        // ================================================================
+        const pkData = {
+            titleEn: 'Lecture 1',
+            titleAr: 'المحاضرة الأولى',
+            slides: [
+                {
+                    title: 'Definition of Pharmacokinetics · تعريف حركية الدواء',
+                    cards: [
+                        card('What the body does to the drug · ما يفعله الجسم بالدواء', [
+                            { en: 'Describes <span class="highlight-text">"what the body does to the drug"</span>.', ar: 'يصف <span class="highlight-text">"ما يفعله الجسم بالدواء"</span>.' },
+                            { en: 'Explains the movement processes that undergo to the drug following its administration.', ar: 'يشرح عمليات الحركة التي يمر بها الدواء بعد إعطائه.' },
+                            { en: 'It is the study of drug <span class="highlight-text">absorption, distribution, metabolism, and excretion</span>.', ar: 'هو دراسة <span class="highlight-text">امتصاص، توزيع، استقلاب، وإخراج</span> الدواء.' }
+                        ], 'ما يفعله الجسم بالدواء:')
+                    ]
+                },
+                {
+                    title: '1- Absorption · الامتصاص',
+                    cards: [
+                        card('Definition · التعريف', [
+                            { en: 'Transfer of a drug from its <span class="highlight-text">site of administration</span> to the <span class="highlight-text">bloodstream</span>.', ar: 'انتقال الدواء من <span class="highlight-text">موقع إعطائه</span> إلى <span class="highlight-text">مجرى الدم</span>.' }
+                        ], 'التعريف:'),
+                        card('Mechanisms of transport · آليات النقل', [
+                            { en: '<span class="highlight-text">1. Passive (lipid) diffusion:</span> Most common mechanism. Lipid-soluble drugs dissolve in the cell membrane. Dependent on lipid solubility, ionization, and pH. Moves according to concentration gradient (high → low). No energy needed.', ar: '<span class="highlight-text">1. الانتشار السلبي (الدهني):</span> الآلية الأكثر شيوعاً. الأدوية الذائبة في الدهون تذوب في غشاء الخلية. تعتمد على ذوبان الدهون والتأين ودرجة الحموضة. تتحرك حسب تدرج التركيز (من الأعلى إلى الأدنى). لا تحتاج طاقة.' },
+                            { en: '<span class="highlight-text">2. Facilitated diffusion:</span> Other agents can enter the cell through transporters. Moves according to concentration gradient. No energy needed.', ar: '<span class="highlight-text">2. الانتشار الميسر:</span> يمكن لعوامل أخرى دخول الخلية عبر الناقلات. تتحرك حسب تدرج التركيز. لا تحتاج طاقة.' },
+                            { en: '<span class="highlight-text">3. Active transport:</span> Needs carriers capable of moving drugs against a concentration gradient. Energy-dependent.', ar: '<span class="highlight-text">3. النقل النشط:</span> يحتاج ناقلات قادرة على تحريك الأدوية عكس تدرج التركيز. يعتمد على الطاقة.' },
+                            { en: '<span class="highlight-text">4. Filtration or aqueous diffusion:</span> Occurs with water-soluble drugs. Drugs pass through aqueous channels or pores between cells. These pores are absent in the BBB and placental barrier.', ar: '<span class="highlight-text">4. الترشيح أو الانتشار المائي:</span> يحدث مع الأدوية الذائبة في الماء. تمر الأدوية عبر قنوات مائية أو مسام بين الخلايا. هذه المسام غائبة في الحاجز الدموي الدماغي والمشيمي.' },
+                            { en: '<span class="highlight-text">5. Pinocytosis (endocytosis):</span> Occurs with high molecular weight drugs as Vit. B12.', ar: '<span class="highlight-text">5. البلعمة (الالتقام الخلوي):</span> يحدث مع الأدوية عالية الوزن الجزيئي مثل فيتامين ب12.' }
+                        ], 'آليات النقل:')
+                    ]
+                },
+                {
+                    title: 'Factors Affecting Drug Absorption · العوامل المؤثرة على الامتصاص',
+                    cards: [
+                        card('A- Factors related to the drug · عوامل تتعلق بالدواء', [
+                            { en: '<span class="highlight-text">1. Lipid solubility:</span> Greater lipid solubility increases absorption.', ar: '<span class="highlight-text">1. ذوبان الدهون:</span> زيادة ذوبان الدهون تزيد الامتصاص.' },
+                            { en: '<span class="highlight-text">2. pH</span>', ar: '<span class="highlight-text">2. درجة الحموضة</span>' },
+                            { en: '<span class="highlight-text">3. Ionization:</span> Unionized drugs are lipid soluble, so more absorption. Water-soluble drugs are ionized, so less absorption.', ar: '<span class="highlight-text">3. التأين:</span> الأدوية غير المتأينة ذائبة في الدهون، لذا امتصاص أكثر. الأدوية الذائبة في الماء متأينة، لذا امتصاص أقل.' },
+                            { en: '<span class="highlight-text">4. Molecular weight:</span> Less molecular weight increases absorption.', ar: '<span class="highlight-text">4. الوزن الجزيئي:</span> وزن جزيئي أقل يزيد الامتصاص.' },
+                            { en: '<span class="highlight-text">5. Dosage form</span>', ar: '<span class="highlight-text">5. الشكل الدوائي</span>' },
+                            { en: '<span class="highlight-text">6. Concentration of the drug</span>', ar: '<span class="highlight-text">6. تركيز الدواء</span>' }
+                        ], 'عوامل تتعلق بالدواء:'),
+                        card('B- Factors related to the patient · عوامل تتعلق بالمريض', [
+                            { en: '<span class="highlight-text">1. Route of administration</span>', ar: '<span class="highlight-text">1. طريق الإعطاء</span>' },
+                            { en: '<span class="highlight-text">2. Blood supply</span>', ar: '<span class="highlight-text">2. الإمداد الدموي</span>' },
+                            { en: '<span class="highlight-text">3. Healthy state</span>', ar: '<span class="highlight-text">3. الحالة الصحية</span>' },
+                            { en: '<span class="highlight-text">4. GIT motility</span>', ar: '<span class="highlight-text">4. حركية الجهاز الهضمي</span>' },
+                            { en: '<span class="highlight-text">5. Presence of other drugs</span>', ar: '<span class="highlight-text">5. وجود أدوية أخرى</span>' },
+                            { en: '<span class="highlight-text">6. Presence of food:</span> Tetracycline absorption is decreased by dairy milk products.', ar: '<span class="highlight-text">6. وجود الطعام:</span> امتصاص التتراسيكلين يقل بمنتجات الحليب.' },
+                            { en: '<span class="highlight-text">7. First pass-metabolism:</span> Metabolism that occurs before the drug reaches systemic circulation (GIT or liver). In cases of insulin, lidocaine and epinephrine. These drugs can\'t be taken orally due to poor bioavailability.', ar: '<span class="highlight-text">7. استقلاب المرور الأول:</span> الاستقلاب الذي يحدث قبل وصول الدواء للدورة الجهازية (الجهاز الهضمي أو الكبد). في حالات الإنسولين والليدوكايين والإبينفرين. لا يمكن تناول هذه الأدوية عن طريق الفم بسبب ضعف التوافر الحيوي.' }
+                        ], 'عوامل تتعلق بالمريض:')
+                    ]
+                },
+                {
+                    title: '2- Distribution · التوزيع',
+                    cards: [
+                        card('Definition · التعريف', [
+                            { en: 'Distribution is the process of distribution of a drug from the <span class="highlight-text">systemic circulation</span> to <span class="highlight-text">organs and tissues</span>.', ar: 'التوزيع هو عملية توزيع الدواء من <span class="highlight-text">الدورة الجهازية</span> إلى <span class="highlight-text">الأعضاء والأنسجة</span>.' }
+                        ], 'التعريف:'),
+                        card('Factors affecting drug distribution · العوامل المؤثرة على التوزيع', [
+                            { en: '<span class="highlight-text">1. Regional blood flow:</span> Heart, liver, kidneys, brain and other highly perfused organs receive most of the drug.', ar: '<span class="highlight-text">1. التدفق الدموي الإقليمي:</span> القلب والكبد والكلى والدماغ والأعضاء عالية التروية تستقبل معظم الدواء.' },
+                            { en: '<span class="highlight-text">2. Physical and chemical properties:</span> Hydrophobic (lipid-soluble) drugs show more distribution. Hydrophilic (water-soluble) drugs show less distribution.', ar: '<span class="highlight-text">2. الخصائص الفيزيائية والكيميائية:</span> الأدوية الكارهة للماء (الذائبة في الدهون) تظهر توزيعاً أكثر. الأدوية المحبة للماء (الذائبة في الماء) تظهر توزيعاً أقل.' },
+                            { en: '<span class="highlight-text">3. Presence of special barrier:</span> The blood-brain barrier controls the passage of drugs to the brain.', ar: '<span class="highlight-text">3. وجود حاجز خاص:</span> الحاجز الدموي الدماغي يتحكم في مرور الأدوية إلى الدماغ.' },
+                            { en: '<span class="highlight-text">4. Binding to plasma proteins (Albumin):</span> More plasma protein binding → less distribution. Protein-bound drugs are pharmacologically inactive. Competition between drugs for binding sites (drug-drug interaction).', ar: '<span class="highlight-text">4. الارتباط ببروتينات البلازما (الألبومين):</span> ارتباط أكثر ببروتين البلازما → توزيع أقل. الأدوية المرتبطة بالبروتين غير فعالة دوائياً. التنافس بين الأدوية على مواقع الارتباط (تفاعل دوائي).' },
+                            { en: '<span class="highlight-text">5. Tissue protein binding:</span> More tissue protein binding → more distribution. Competition between drugs for tissue protein-binding sites (drug-drug interaction).', ar: '<span class="highlight-text">5. الارتباط ببروتين الأنسجة:</span> ارتباط أكثر ببروتين الأنسجة → توزيع أكثر. التنافس بين الأدوية على مواقع الارتباط ببروتين الأنسجة (تفاعل دوائي).' }
+                        ], 'العوامل المؤثرة على التوزيع:')
+                    ]
+                },
+                {
+                    title: 'III- Metabolism (Biotransformation) · الاستقلاب (التحول الحيوي)',
+                    cards: [
+                        card('Definition · التعريف', [
+                            { en: 'Chemical transformation that occurs to the drug inside the body to <span class="highlight-text">decrease its lipid solubility</span> and <span class="highlight-text">increase its water solubility</span> to be excreted by the kidneys.', ar: 'التحول الكيميائي الذي يحدث للدواء داخل الجسم <span class="highlight-text">لتقليل ذوبانه في الدهون</span> و<span class="highlight-text">زيادة ذوبانه في الماء</span> ليُطرح عن طريق الكلى.' }
+                        ], 'التعريف:'),
+                        card('Effects on biological activity · تأثيرات على الفعالية البيولوجية', [
+                            { en: '<span class="highlight-text">1. Detoxification:</span> An active lipid-soluble drug changes to an inactive water-soluble metabolite (most drugs).', ar: '<span class="highlight-text">1. إزالة السمية:</span> يتحول دواء نشط ذائب في الدهون إلى مستقلب غير نشط ذائب في الماء (معظم الأدوية).' },
+                            { en: '<span class="highlight-text">2. Active to active:</span> An active drug changes to another active metabolite, e.g. Codeine → morphine.', ar: '<span class="highlight-text">2. نشط إلى نشط:</span> يتحول دواء نشط إلى مستقلب نشط آخر، مثل الكودايين → المورفين.' },
+                            { en: '<span class="highlight-text">3. Bioactivation:</span> An inactive prodrug changes to an active metabolite. Prednisone → prednisolone.', ar: '<span class="highlight-text">3. التنشيط الحيوي:</span> يتحول دواء أولي غير نشط إلى مستقلب نشط. بريدنيزون → بريدنيزولون.' },
+                            { en: '<span class="highlight-text">4. Toxic metabolites:</span> Some compounds are converted to toxic metabolites, e.g., acetaminophen.', ar: '<span class="highlight-text">4. مستقلبات سامة:</span> بعض المركبات تتحول إلى مستقلبات سامة، مثل الأسيتامينوفين.' }
+                        ], 'تأثيرات على الفعالية:'),
+                        card('Organs responsible · الأعضاء المسؤولة', [
+                            { en: '<span class="highlight-text">1. Liver (main site)</span>', ar: '<span class="highlight-text">1. الكبد (الموقع الرئيسي)</span>' },
+                            { en: '<span class="highlight-text">2. Others:</span> kidney, gut mucosa, lung, brain and skin.', ar: '<span class="highlight-text">2. أخرى:</span> الكلى، الغشاء المخاطي للأمعاء، الرئة، الدماغ والجلد.' }
+                        ], 'الأعضاء المسؤولة:')
+                    ]
+                },
+                {
+                    title: 'Phases of Metabolism · مراحل الاستقلاب',
+                    cards: [
+                        card('Phase I Reactions (Non-synthetic) · تفاعلات المرحلة الأولى', [
+                            { en: 'Modification of the drug molecule via <span class="highlight-text">oxidation, reduction, or hydrolysis</span>.', ar: 'تعديل جزيء الدواء عبر <span class="highlight-text">الأكسدة، الاختزال، أو التحلل المائي</span>.' },
+                            { en: '<span class="highlight-text">Cytochrome P450 isozymes:</span> major enzyme systems involved in Phase I reactions.', ar: '<span class="highlight-text">أشكال السيتوكروم P450:</span> أنظمة الإنزيمات الرئيسية المشاركة في تفاعلات المرحلة الأولى.' }
+                        ], 'تفاعلات المرحلة الأولى:'),
+                        card('Phase II Reactions (Synthetic) · تفاعلات المرحلة الثانية', [
+                            { en: 'Conjugation reaction with endogenous compounds via the activity of <span class="highlight-text">transferases</span>.', ar: 'تفاعل اقتران مع مركبات داخلية عبر نشاط <span class="highlight-text">الترانسفيرازات</span>.' },
+                            { en: '<span class="highlight-text">Glucuronidation:</span> reaction with glucuronic acid.', ar: '<span class="highlight-text">الاقتران بالجلوكورونيك:</span> تفاعل مع حمض الجلوكورونيك.' },
+                            { en: '<span class="highlight-text">Acetylation:</span> reaction with acetyl group.', ar: '<span class="highlight-text">الأسيتلة:</span> تفاعل مع مجموعة الأسيتيل.' }
+                        ], 'تفاعلات المرحلة الثانية:')
+                    ]
+                },
+                {
+                    title: 'Enterohepatic Circulation · الدورة الكبدية المعوية',
+                    cards: [
+                        card('Enterohepatic circulation (recyclization) · الدورة الكبدية المعوية (إعادة التدوير)', [
+                            { en: 'For some drugs excreted in bile, decoupling may occur by <span class="highlight-text">gut bacterial enzymes</span>, so reabsorption of the uncoupled drug can occur from the intestine. This prolongs the duration of action of some drugs as with <span class="highlight-text">estrogen</span>.', ar: 'بالنسبة لبعض الأدوية التي تُطرح في الصفراء، قد يحدث فك الارتباط بواسطة <span class="highlight-text">إنزيمات بكتيريا الأمعاء</span>، لذا يمكن إعادة امتصاص الدواء المفكوك من الأمعاء. هذا يطيل مدة تأثير بعض الأدوية مثل <span class="highlight-text">الإستروجين</span>.' }
+                        ], 'الدورة الكبدية المعوية:'),
+                        card('Clinical significance · الأهمية السريرية', [
+                            { en: '<span class="highlight-text">Oral contraceptive failure</span> when an antibiotic is taken: The antibiotic eliminates bacteria and interrupts enterohepatic cycling.', ar: '<span class="highlight-text">فشل موانع الحمل الفموية</span> عند تناول مضاد حيوي: المضاد الحيوي يقضي على البكتيريا ويقطع الدورة الكبدية المعوية.' },
+                            { en: 'An antibiotic such as <span class="highlight-text">rifampin</span> also induces CYP enzymes that metabolize contraceptive hormones and thus reduces their effectiveness even more.', ar: 'مضاد حيوي مثل <span class="highlight-text">الريفامبين</span> يحفز أيضاً إنزيمات CYP التي تستقلب هرمونات منع الحمل وبالتالي يقلل فعاليتها أكثر.' }
+                        ], 'الأهمية السريرية:')
+                    ]
+                },
+                {
+                    title: 'Factors Affecting Drug Metabolism · العوامل المؤثرة على الاستقلاب',
+                    cards: [
+                        card('1. Genetic polymorphism · التعدد الجيني', [
+                            { en: '<span class="highlight-text">Fast metabolizers:</span> more metabolism with less accumulation.', ar: '<span class="highlight-text">سريعو الاستقلاب:</span> استقلاب أكثر مع تراكم أقل.' },
+                            { en: '<span class="highlight-text">Slow metabolizers:</span> less metabolism with more accumulation and risk of toxicity. Need to decrease the dose.', ar: '<span class="highlight-text">بطيئو الاستقلاب:</span> استقلاب أقل مع تراكم أكثر وخطر السمية. يجب تقليل الجرعة.' }
+                        ], 'التعدد الجيني:'),
+                        card('2. Age and sex · العمر والجنس', [
+                            { en: 'Young age, especially <span class="highlight-text">newborns</span>, and the <span class="highlight-text">elderly</span> are slow metabolizers.', ar: 'صغار السن، خاصة <span class="highlight-text">حديثي الولادة</span>، و<span class="highlight-text">المسنون</span> بطيئو الاستقلاب.' },
+                            { en: '<span class="highlight-text">Males</span> may be rapid metabolizers than females.', ar: '<span class="highlight-text">الذكور</span> قد يكونون أسرع استقلاباً من الإناث.' }
+                        ], 'العمر والجنس:'),
+                        card('3. Environmental factors · العوامل البيئية', [
+                            { en: '<span class="highlight-text">Inducers:</span> Cigarette smoking, pesticides, dyes, charcoal-broiled foods, and cruciferous vegetables induce (increase activity) of liver microsomal enzymes (CYP-450).', ar: '<span class="highlight-text">المحفزات:</span> تدخين السجائر، المبيدات، الأصباغ، الأطعمة المشوية على الفحم، والخضروات الصليبية تحفز (تزيد نشاط) إنزيمات الكبد الميكروسومية (CYP-450).' },
+                            { en: '<span class="highlight-text">Inhibitor:</span> Grapefruit juice inhibits CYP-450.', ar: '<span class="highlight-text">المثبط:</span> عصير الجريب فروت يثبط CYP-450.' }
+                        ], 'العوامل البيئية:'),
+                        card('4. Pathological factors · العوامل المرضية', [
+                            { en: 'Liver, heart, and lung diseases, as well as <span class="highlight-text">malnutrition</span>, decrease drug metabolism by reducing the amount and activity of enzymes.', ar: 'أمراض الكبد والقلب والرئة، بالإضافة إلى <span class="highlight-text">سوء التغذية</span>، تقلل استقلاب الدواء عن طريق تقليل كمية ونشاط الإنزيمات.' }
+                        ], 'العوامل المرضية:'),
+                        card('5. Drug-drug interaction · التفاعل الدوائي', [
+                            { en: '<span class="highlight-text">Enzyme inducers:</span> Stimulate the microsomal enzyme system, increasing their own metabolism and the metabolism of other drugs. Examples: Phenobarbitone, carbamazepine, phenytoin, rifampin, insecticides & cigarette smoke.', ar: '<span class="highlight-text">محفزات الإنزيم:</span> تحفز نظام الإنزيمات الميكروسومية، مما يزيد استقلابها الذاتي واستقلاب الأدوية الأخرى. أمثلة: الفينوباربيتون، الكاربامازيبين، الفينيتوين، الريفامبين، المبيدات الحشرية ودخان السجائر.' },
+                            { en: '<span class="highlight-text">Enzyme inhibitors:</span> Inhibit metabolism of other drugs, so potentiate their effects and can cause accumulation with increase in the risk of toxicity. Examples: Cimetidine, ketoconazole, erythromycin and ciprofloxacin.', ar: '<span class="highlight-text">مثبطات الإنزيم:</span> تثبط استقلاب الأدوية الأخرى، لذا تقوي تأثيراتها ويمكن أن تسبب تراكماً مع زيادة خطر السمية. أمثلة: السيميتيدين، الكيتوكونازول، الإريثروميسين والسيبروفلوكساسين.' }
+                        ], 'التفاعل الدوائي:')
+                    ]
+                },
+                {
+                    title: 'IV- Excretion · الإخراج',
+                    cards: [
+                        card('Routes of excretion · طرق الإخراج', [
+                            { en: 'Removal of a drug from the body occurs via a number of routes; the most important being through the <span class="highlight-text">kidney into the urine</span>.', ar: 'إزالة الدواء من الجسم تحدث عبر عدد من الطرق؛ الأهم هو عبر <span class="highlight-text">الكلى إلى البول</span>.' },
+                            { en: 'Other routes include the <span class="highlight-text">bile, intestine, lung, or milk</span> in nursing mothers.', ar: 'طرق أخرى تشمل <span class="highlight-text">الصفراء، الأمعاء، الرئة، أو الحليب</span> في الأمهات المرضعات.' }
+                        ], 'طرق الإخراج:'),
+                        card('Renal Excretion · الإخراج الكلوي', [
+                            { en: '<span class="highlight-text">1. Glomerular filtration:</span> aims to excrete the drug into urine.', ar: '<span class="highlight-text">1. الترشيح الكبيبي:</span> يهدف لإخراج الدواء إلى البول.' },
+                            { en: '<span class="highlight-text">2. Active tubular secretion:</span> aims to excrete drug into urine.', ar: '<span class="highlight-text">2. الإفراز الأنبوبي النشط:</span> يهدف لإخراج الدواء إلى البول.' },
+                            { en: '<span class="highlight-text">3. Passive tubular reabsorption:</span> aims to reabsorb drug from urine into body.', ar: '<span class="highlight-text">3. إعادة الامتصاص الأنبوبي السلبي:</span> يهدف لإعادة امتصاص الدواء من البول إلى الجسم.' }
+                        ], 'الإخراج الكلوي:')
+                    ]
+                },
+                {
+                    title: 'Factors Affecting Drug Excretion · العوامل المؤثرة على الإخراج',
+                    cards: [
+                        card('1. Lipid solubility and ionization · ذوبان الدهون والتأين', [
+                            { en: 'Increase in lipid solubility (unionization) <span class="highlight-text">decrease</span> drug excretion.', ar: 'زيادة ذوبان الدهون (عدم التأين) <span class="highlight-text">تقلل</span> إخراج الدواء.' }
+                        ], 'ذوبان الدهون والتأين:'),
+                        card('2. Plasma protein binding · الارتباط ببروتين البلازما', [
+                            { en: 'Increase in binding leads to a decrease in the free form, so <span class="highlight-text">decreasing</span> drug excretion.', ar: 'زيادة الارتباط تؤدي إلى تقليل الشكل الحر، لذا <span class="highlight-text">تقلل</span> إخراج الدواء.' }
+                        ], 'الارتباط ببروتين البلازما:'),
+                        card('3. Presence of other drugs · وجود أدوية أخرى', [
+                            { en: 'Competition between drugs. <span class="highlight-text">Probenecid</span> inhibits active tubular secretion of penicillins.', ar: 'التنافس بين الأدوية. <span class="highlight-text">البروبينسيد</span> يثبط الإفراز الأنبوبي النشط للبنسلينات.' }
+                        ], 'وجود أدوية أخرى:'),
+                        card('4. pH of urinary tubules · درجة حموضة الأنابيب البولية', [
+                            { en: 'Change in the pH of urine causes a change in the ionization of the drug.', ar: 'تغير درجة حموضة البول يسبب تغيراً في تأين الدواء.' },
+                            { en: '<span class="highlight-text">Alkalization</span> of urine by NaHCO3 is used to enhance aspirin (acidic) excretion.', ar: '<span class="highlight-text">قلوية</span> البول بواسطة بيكربونات الصوديوم تُستخدم لتعزيز إخراج الأسبرين (حمضي).' },
+                            { en: '<span class="highlight-text">Acidification</span> of urine by Vit C is used to enhance morphine or atropine (basic) excretion.', ar: '<span class="highlight-text">حمضية</span> البول بواسطة فيتامين C تُستخدم لتعزيز إخراج المورفين أو الأتروبين (قاعدي).' }
+                        ], 'درجة حموضة الأنابيب البولية:'),
+                        card('5. Molecular weight · الوزن الجزيئي', [
+                            { en: 'An increase in molecular weight of the drug causes <span class="highlight-text">decrease</span> in drug excretion.', ar: 'زيادة الوزن الجزيئي للدواء تسبب <span class="highlight-text">انخفاضاً</span> في إخراج الدواء.' }
+                        ], 'الوزن الجزيئي:'),
+                        card('6. Renal blood flow · التدفق الدموي الكلوي', [
+                            { en: 'Increasing renal blood flow may <span class="highlight-text">enhance</span> drug excretion.', ar: 'زيادة التدفق الدموي الكلوي قد <span class="highlight-text">تعزز</span> إخراج الدواء.' }
+                        ], 'التدفق الدموي الكلوي:'),
+                        card('7. Healthy state of kidney · الحالة الصحية للكلى', [
+                            { en: 'Healthy kidney function is essential for proper drug excretion.', ar: 'وظيفة الكلى الصحية ضرورية للإخراج السليم للدواء.' }
+                        ], 'الحالة الصحية للكلى:')
+                    ]
+                },
+                {
+                    title: 'Pharmacokinetic Variables · المتغيرات الحركية الدوائية',
+                    cards: [
+                        card('Definition · التعريف', [
+                            { en: 'Variables which differ from one individual to other according to certain <span class="highlight-text">physiological factors</span> (as age, sex, etc.) or <span class="highlight-text">pathological factors</span> (as liver, kidney diseases, etc.) and so need adjustment of the dose.', ar: 'متغيرات تختلف من فرد لآخر وفقاً لـ<span class="highlight-text">عوامل فسيولوجية</span> معينة (كالعمر، الجنس، إلخ) أو <span class="highlight-text">عوامل مرضية</span> (كأمراض الكبد والكلى، إلخ) وبالتالي تحتاج تعديل الجرعة.' },
+                            { en: 'Pharmacokinetic parameters include: <span class="highlight-text">Bioavailability (F), Volume of distribution (Vd), Clearance (CL), Biological half-life (t 1/2)</span>.', ar: 'تشمل المعايير الحركية الدوائية: <span class="highlight-text">التوافر الحيوي (F)، حجم التوزيع (Vd)، التصفية (CL)، عمر النصف البيولوجي (t 1/2)</span>.' }
+                        ], 'التعريف:')
+                    ]
+                },
+                {
+                    title: '1) Bioavailability (F) · التوافر الحيوي',
+                    cards: [
+                        card('Definition · التعريف', [
+                            { en: 'Fraction of unchanged drug (active form) reaching the <span class="highlight-text">systemic circulation</span> following administration by any route.', ar: 'نسبة الدواء غير المتغير (الشكل النشط) الذي يصل إلى <span class="highlight-text">الدورة الجهازية</span> بعد الإعطاء بأي طريق.' }
+                        ], 'التعريف:'),
+                        card('Causes of low oral bioavailability · أسباب انخفاض التوافر الحيوي الفموي', [
+                            { en: '<span class="highlight-text">A- Poor absorption</span>', ar: '<span class="highlight-text">أ- ضعف الامتصاص</span>' },
+                            { en: '<span class="highlight-text">B- Extensive first pass metabolism</span>', ar: '<span class="highlight-text">ب- استقلاب المرور الأول الواسع</span>' }
+                        ], 'أسباب انخفاض التوافر الحيوي:'),
+                        card('Clinical note · ملاحظة سريرية', [
+                            { en: 'Drugs with low oral bioavailability should be given by other routes as <span class="highlight-text">I.V., I.M., sublingual</span>.', ar: 'الأدوية ذات التوافر الحيوي الفموي المنخفض يجب إعطاؤها بطرق أخرى مثل <span class="highlight-text">الوريد، العضل، تحت اللسان</span>.' }
+                        ], 'ملاحظة سريرية:')
+                    ]
+                },
+                {
+                    title: '2) Volume of Distribution (Vd) · حجم التوزيع',
+                    cards: [
+                        card('Definition and determinants · التعريف والمحددات', [
+                            { en: 'Vd is <span class="highlight-text">low</span> when a high percentage of a drug is bound to plasma proteins.', ar: 'حجم التوزيع يكون <span class="highlight-text">منخفضاً</span> عندما ترتبط نسبة عالية من الدواء ببروتينات البلازما.' },
+                            { en: 'Vd is <span class="highlight-text">high</span> when a high percentage of a drug is being sequestered in tissues.', ar: 'حجم التوزيع يكون <span class="highlight-text">مرتفعاً</span> عندما تُحتجز نسبة عالية من الدواء في الأنسجة.' },
+                            { en: 'Drugs achieve high Vd if they are: (1) <span class="highlight-text">Highly unionized</span>, (2) <span class="highlight-text">Highly lipid soluble</span>, (3) <span class="highlight-text">Less bound to plasma protein</span>, (4) <span class="highlight-text">High bound to tissue protein</span>.', ar: 'تحقق الأدوية حجماً مرتفعاً للتوزيع إذا كانت: (1) <span class="highlight-text">عالية عدم التأين</span>، (2) <span class="highlight-text">عالية الذوبان في الدهون</span>، (3) <span class="highlight-text">أقل ارتباطاً ببروتين البلازما</span>، (4) <span class="highlight-text">عالية الارتباط ببروتين الأنسجة</span>.' }
+                        ], 'التعريف والمحددات:'),
+                        card('Clinical significance of Vd · الأهمية السريرية لحجم التوزيع', [
+                            { en: '<span class="highlight-text">1. How to treat drug toxicity:</span>', ar: '<span class="highlight-text">1. كيفية علاج سمية الدواء:</span>' },
+                            { en: 'If toxicity occurs with drugs with <span class="highlight-text">high Vd</span>, such as digoxin (highly distributed), haemodialysis has <span class="highlight-text">no value</span> in removing the drug, as plasma levels are very low and most of the drug is concentrated in tissues.', ar: 'إذا حدثت سمية مع أدوية ذات <span class="highlight-text">حجم توزيع مرتفع</span>، مثل الديجوكسين (موزع بشدة)، فإن غسيل الدم <span class="highlight-text">لا قيمة له</span> في إزالة الدواء، حيث أن مستويات البلازما منخفضة جداً ومعظم الدواء مركّز في الأنسجة.' },
+                            { en: 'But in cases of toxicity by drugs with <span class="highlight-text">low Vd</span>, such as aspirin, haemodialysis is <span class="highlight-text">beneficial</span> and can remove most of the drug as it is concentrated in the blood.', ar: 'لكن في حالات السمية بأدوية ذات <span class="highlight-text">حجم توزيع منخفض</span>، مثل الأسبرين، فإن غسيل الدم <span class="highlight-text">مفيد</span> ويمكنه إزالة معظم الدواء لأنه مركّز في الدم.' },
+                            { en: '<span class="highlight-text">2. Calculation of loading dose.</span>', ar: '<span class="highlight-text">2. حساب جرعة التحميل.</span>' }
+                        ], 'الأهمية السريرية:')
+                    ]
+                }
+            ]
+        };
+
+        // ================================================================
+        //  BUILD APP
+        // ================================================================
+        const slidesData = { pk: pkData };
+        const sectionOrder = ['pk'];
+
+        function renderSlideContent(slide) {
+            if (slide.cards && Array.isArray(slide.cards)) {
+                return createSlideHTML(slide.title, slide.cards.join(''));
+            }
+            return createSlideHTML(slide.title, '');
+        }
+
+        function buildApp() {
+            const tabsContainer = document.getElementById('tabsContainer');
+            const sectionsContainer = document.getElementById('sectionsContainer');
+
+            sectionOrder.forEach((secId) => {
+                const sec = slidesData[secId];
+                if (!sec) return;
+
+                const tab = document.createElement('button');
+                tab.className = 'tab-btn active';
+                tab.innerHTML = `<span class="en">${sec.titleEn}</span><span class="ar">${sec.titleAr}</span>`;
+                tabsContainer.appendChild(tab);
+
+                const cardEl = document.createElement('div');
+                cardEl.className = 'card active';
+                cardEl.id = `section-${secId}`;
+
+                const slidesHTML = sec.slides.map(s => renderSlideContent(s)).join('');
+                const totalSlides = sec.slides.length;
+
+                cardEl.innerHTML = `
+                    <h2>${sec.titleEn} · ${sec.titleAr}</h2>
+                    <div class="slide-container" id="slideContainer-${secId}">
+                        <div class="slide-progress">
+                            <span style="font-weight:600;">التقدم</span>
+                            <div class="bar"><div class="fill" style="width:0%;"></div></div>
+                            <span class="count">1 / ${totalSlides}</span>
+                        </div>
+                        ${slidesHTML}
+                        <div class="slide-nav">
+                            <button class="btn-nav prev" onclick="goToSlide('${secId}', 'slideContainer-${secId}', slideState['${secId}'].current - 1)">السابق</button>
+                            <button class="btn-nav next primary" onclick="goToSlide('${secId}', 'slideContainer-${secId}', slideState['${secId}'].current + 1)">التالي</button>
+                        </div>
+                    </div>
+                `;
+                sectionsContainer.appendChild(cardEl);
+
+                initSlideState(secId, totalSlides);
+                setTimeout(() => renderSlide(secId, `slideContainer-${secId}`), 50);
+            });
+        }
+
+        // ================================================================
+        //  INIT
+        // ================================================================
+        applyTheme(localStorage.getItem('theme') || 'dark');
+        buildApp();
+
+        window.goToSlide = goToSlide;
+        window.slideState = slideState;
+        window.toggleTheme = toggleTheme;
+        window.toggleCardTranslation = toggleCardTranslation;
+    </script>
+</body>
+</html>
