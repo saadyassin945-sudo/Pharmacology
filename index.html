@@ -141,15 +141,15 @@
         .tabs-wrap {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 8px;
             margin-bottom: 16px;
             justify-content: center;
         }
         .tab-btn {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 30px;
-            padding: 8px 14px;
+            border-radius: 16px;
+            padding: 10px 16px;
             font-size: 0.7rem;
             font-weight: 600;
             color: var(--muted);
@@ -157,6 +157,7 @@
             transition: all 0.2s ease;
             text-align: center;
             line-height: 1.3;
+            min-width: 140px;
         }
         .tab-btn:hover { border-color: var(--primary); color: var(--text); }
         .tab-btn.active {
@@ -164,18 +165,11 @@
             background: rgba(0, 212, 255, 0.08);
             color: var(--primary);
         }
-        .tab-btn .en { display: block; font-size: 0.7rem; }
-        .tab-btn .tab-title {
-            display: block;
-            font-size: 0.58rem;
-            color: var(--text);
-            opacity: 0.9;
-            font-weight: 600;
-            margin-top: 1px;
-            line-height: 1.2;
-        }
-        .tab-btn.active .tab-title { color: var(--primary); }
-        .tab-btn .ar { display: block; font-size: 0.55rem; opacity: 0.7; }
+        .tab-btn .en { display: block; font-size: 0.75rem; font-weight: 800; color: var(--text); }
+        .tab-btn.active .en { color: var(--primary); }
+        .tab-btn .en-sub { display: block; font-size: 0.65rem; font-weight: 600; color: var(--primary); margin-top: 3px; }
+        .tab-btn .ar { display: block; font-size: 0.55rem; opacity: 0.75; margin-top: 4px; }
+        .tab-btn .ar-sub { display: block; font-size: 0.5rem; opacity: 0.55; }
 
         /* ===== CARDS ===== */
         .card {
@@ -198,7 +192,12 @@
             padding-right: 12px;
             margin-bottom: 16px;
             font-weight: 700;
+            line-height: 1.4;
         }
+        .card h2 .lec-num { display: block; font-size: 1.35rem; color: var(--text); font-weight: 800; }
+        .card h2 .lec-title-en { display: block; font-size: 1rem; color: var(--primary); font-weight: 600; margin-top: 4px; }
+        .card h2 .lec-num-ar { display: block; font-size: 0.85rem; color: var(--muted); font-weight: 500; margin-top: 6px; }
+        .card h2 .lec-title-ar { display: block; font-size: 0.78rem; color: var(--muted); opacity: 0.85; }
 
         /* ===== SLIDES ===== */
         .slide-container {
@@ -365,7 +364,7 @@
         }
         .topic-card .card-items li:last-child { border-bottom: none; }
 
-        /* ===== TTS: English text clickable, NO speaker icon ===== */
+        /* ===== TTS: English text clickable ===== */
         .topic-card .item-en {
             font-weight: 600;
             color: var(--text);
@@ -496,7 +495,7 @@
         @media (max-width: 768px) {
             body { padding: 8px 4px; }
             .header h1 { font-size: 1.4rem; }
-            .tab-btn { padding: 6px 10px; font-size: 0.6rem; }
+            .tab-btn { padding: 8px 10px; font-size: 0.6rem; min-width: 110px; }
             .card { padding: 14px 10px; }
             .card h2 { font-size: 1.1rem; }
         }
@@ -533,8 +532,7 @@
             <div class="header-top">
                 <div>
                     <h1><span class="highlight">Pharmacology</span></h1>
-                    <div class="sub">
-                    </div>
+                    <div class="sub">علم الأدوية</div>
                     <div class="creator">Created by <span class="name">MR. YASSIN THARWAT</span></div>
                 </div>
                 <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="تبديل الوضع">☀</button>
@@ -675,7 +673,7 @@
         }
 
         // ================================================================
-        //  TEXT-TO-SPEECH (TTS) - Hidden, clicks on English text only
+        //  TEXT-TO-SPEECH (TTS)
         // ================================================================
         function initTTS() {
             if (!window.speechSynthesis) return;
@@ -748,7 +746,7 @@
                 <html lang="ar" dir="rtl">
                 <head>
                     <meta charset="UTF-8">
-                    <title>Pharmacology</title>
+                    <title>${sec.titleEn} — ${sec.subjectEn}</title>
                     <style>
                         @page { margin: 12mm 10mm; size: A4; }
                         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -767,7 +765,7 @@
                         .pdf-subject-header {
                             text-align: center;
                             border-bottom: 3px solid #0099cc;
-                            padding-bottom: 8px;
+                            padding-bottom: 10px;
                             margin-bottom: 14px;
                         }
                         .pdf-subject-header h1 {
@@ -776,10 +774,31 @@
                             font-weight: 800;
                             letter-spacing: 2px;
                         }
-                        .pdf-subject-header .creator {
+                        .pdf-lec-num {
+                            font-size: 16px;
+                            color: #0077aa;
+                            font-weight: 700;
+                            margin-top: 8px;
+                        }
+                        .pdf-lec-title {
+                            font-size: 14px;
+                            color: #0f172a;
+                            font-weight: 600;
+                            margin-top: 2px;
+                        }
+                        .pdf-lec-num-ar {
                             font-size: 12px;
-                            color: #666;
-                            margin-top: 3px;
+                            color: #555;
+                            margin-top: 6px;
+                        }
+                        .pdf-lec-title-ar {
+                            font-size: 11px;
+                            color: #777;
+                        }
+                        .pdf-subject-header .creator {
+                            font-size: 11px;
+                            color: #888;
+                            margin-top: 6px;
                         }
                         .pdf-slide {
                             margin-bottom: 14px;
@@ -937,6 +956,10 @@
                 <body>
                     <div class="pdf-subject-header">
                         <h1>PHARMACOLOGY</h1>
+                        <div class="pdf-lec-num">${sec.titleEn}</div>
+                        <div class="pdf-lec-title">${sec.subjectEn}</div>
+                        <div class="pdf-lec-num-ar">${sec.titleAr}</div>
+                        <div class="pdf-lec-title-ar">${sec.subjectAr}</div>
                         <div class="creator">Created by MR. YASSIN THARWAT</div>
                     </div>
                     ${allSlidesHTML}
@@ -955,8 +978,8 @@
         // ================================================================
         const pkData = {
             titleEn: 'Lecture 1',
-            subjectEn: 'Pharmacokinetics',
             titleAr: 'المحاضرة الأولى',
+            subjectEn: 'Pharmacokinetics',
             subjectAr: 'حركية الدواء',
             slides: [
                 {
@@ -1179,8 +1202,8 @@
         // ================================================================
         const lecture2Data = {
             titleEn: 'Lecture 2',
-            subjectEn: 'Overview on Pharmacology',
             titleAr: 'المحاضرة الثانية',
+            subjectEn: 'Overview on Pharmacology',
             subjectAr: 'نظرة عامة على علم الأدوية',
             slides: [
                 {
@@ -1433,12 +1456,11 @@
 
         // ================================================================
         //  DATA: LECTURE 4 — INTRODUCTION TO AUTONOMIC & PARASYMPATHETIC PHARMACOLOGY
-        //  (تم حذف شريحة MCQs بناءً على الطلب)
         // ================================================================
         const lecture4Data = {
             titleEn: 'Lecture 4',
-            subjectEn: 'Introduction to Autonomic & Parasympathetic Pharmacology',
             titleAr: 'المحاضرة الرابعة',
+            subjectEn: 'Introduction to Autonomic & Parasympathetic Pharmacology',
             subjectAr: 'مقدمة في علم الأدوية اللاإرادي والباراسمبثاوي',
             slides: [
                 {
@@ -1826,7 +1848,6 @@
                         ], 'موانع الاستخدام:')
                     ]
                 }
-                // تم حذف شريحة MCQs · أسئلة الاختيار من متعدد
             ]
         };
 
@@ -1853,7 +1874,12 @@
 
                 const tab = document.createElement('button');
                 tab.className = 'tab-btn' + (index === 0 ? ' active' : '');
-                tab.innerHTML = `<span class="en">${sec.titleEn}</span><span class="tab-title">${sec.subjectEn}</span><span class="ar">${sec.titleAr}</span>`;
+                tab.innerHTML = `
+                    <span class="en">${sec.titleEn}</span>
+                    <span class="en-sub">${sec.subjectEn}</span>
+                    <span class="ar">${sec.titleAr}</span>
+                    <span class="ar-sub">${sec.subjectAr}</span>
+                `;
                 tab.onclick = () => switchTab(secId, tab);
                 tabsContainer.appendChild(tab);
 
@@ -1865,7 +1891,12 @@
                 const totalSlides = sec.slides.length;
 
                 cardEl.innerHTML = `
-                    <h2>${sec.titleEn}: ${sec.subjectEn} · ${sec.titleAr}</h2>
+                    <h2>
+                        <span class="lec-num">${sec.titleEn}</span>
+                        <span class="lec-title-en">${sec.subjectEn}</span>
+                        <span class="lec-num-ar">${sec.titleAr}</span>
+                        <span class="lec-title-ar">${sec.subjectAr}</span>
+                    </h2>
                     <div style="text-align:center; margin-bottom:12px;">
                         <button class="pdf-btn" onclick="downloadPDF('${secId}')">📄 تحميل المحاضرة PDF</button>
                     </div>
